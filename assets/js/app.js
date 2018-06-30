@@ -25,7 +25,7 @@ var config = {
 
 // function for maxing sure that all the characters in a string are letters and not numbers, symbols, etc
 function validText (string) {
-    var text = string.toLowercase();
+    var text = string.toLowerCase();
     var isValid = true;
     while(isValid){
         for(var i=0; i < text.length; i++){
