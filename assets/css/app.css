@@ -1,0 +1,36 @@
+.card {
+    width: 85%;
+    margin: auto;
+    margin-top: 20%;
+   
+}
+
+
+.submit {
+    top: 105px;
+    position: relative;
+    height: 42px;
+    
+}
+
+
+.card-divider {
+   /* margin: 25px; */
+   height: 225px;
+   padding: -10px;
+
+}
+
+
+
+.labelFont {
+    font-size: 45px;
+}
+
+#test {
+    margin-left: 60px;
+}
+
+body {
+    background-image: url("../images/joblisting.jpg");
+}
