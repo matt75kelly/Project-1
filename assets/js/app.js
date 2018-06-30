@@ -19,10 +19,10 @@ var config = {
   firebase.initializeApp(config);
 
   var database = firebase.database();
-  var keysDB = database.ref("/Keys");
+  var keysDB = database.ref("/keys");
   var urlsDB = database.ref("/urls");
 
-  console.log(urlsDB.val());
+
 // function for maxing sure that all the characters in a string are letters and not numbers, symbols, etc
 function validText (string) {
     var text = string.toLowercase();
@@ -31,7 +31,7 @@ function validText (string) {
         for(var i=0; i < text.length; i++){
             var char = text.charCodeAt(i);
             if (char < 0x0061 || char > 0x007A){
-                if(char != 0x0027 || char != 0x002D){
+                if(char != 0x0027 || char != 0x002D || char != 0x0020){
                     isValid = false;
                 }
             }
@@ -53,24 +53,89 @@ function validNumber(number) {
     }
     return isNumber;
 }
+// function to convert city name to a valid uaID for teleport API
+function convertTeleport (string) {
+    var text = string.toLowercase();
+    var newtext = "";
+    for (var i=0; i<text.length; i++){
+        var char = text.charAt(i);
+        if (char === " "){
+            newtext += "-";
+        }
+        else {
+            newtext += char;
+        }
+    }
+    return newtext;
+}
 // function for completing the teleport API call
 function retrieveTeleport(){
+    var url;
+    var key;
+    urlsDB.once('value').then(function(snapshot) {
+        url = snapshot.val().teleport;
+    });
 
-$.ajax({
-    url: "",
-    method: "GET"
-}).then(function(response){
-    console.log(response);
-    return response;
-});
+    keysDB.once('value').then(function(snapshot) {
+        key = snapshot.val().teleport;
+    });
+
+    var queryUrl = url + "=" + convertTeleport(userData.city);
+
+      $.ajax({
+        url: queryUrl,
+        method: "GET"
+    }).then(function(response){
+        console.log(response);
+        return response;
+    });
 }
 
+function retrieveRidb(){
+    var url;
+    var key;
+    urlsDB.once('value').then(function(snapshot) {
+        url = snapshot.val().ridb;
+    });
+
+    keysDB.once('value').then(function(snapshot) {
+        key = snapshot.val().ridb;
+    });
+
+    var queryUrl = url + "=" + userData.city + "&";
+
+      $.ajax({
+        url: "",
+        method: "GET"
+    }).then(function(response){
+        console.log(response);
+        return response;
+    });
+}
 function retrieveEventful(){
+    var url;
+    var key;
+    urlsDB.once('value').then(function(snapshot) {
+        url = snapshot.val().eventful;
+    });
 
-}
+    keysDB.once('value').then(function(snapshot) {
+        key = snapshot.eventful.val().eventful;
+    });
+
+    var queryUrl = url + "=" + userData.city + "&";
+
+      $.ajax({
+        url: "",
+        method: "GET"
+    }).then(function(response){
+        console.log(response);
+        return response;
+    });
+}   
 
 function retrieveMaps(){
-
+   
 }
 // function for retrieving the user input data off the DOM
 function getFormData (){
@@ -99,5 +164,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         getFormData();
+        var scores = retrieveTeleport();
+        console.log(scores);
     });
 })
