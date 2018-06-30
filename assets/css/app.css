@@ -6,10 +6,11 @@
 }
 
 
-#searchButton {
-    top: 96px;
+.submit {
+    top: 105px;
     position: relative;
     height: 42px;
+    
 }
 
 
@@ -31,5 +32,5 @@
 }
 
 body {
-    background-image: url("/assets/Images/JobListings.jpg");
+    background-image: url("../images/joblisting.jpg");
 }
