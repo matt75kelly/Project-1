@@ -7,6 +7,22 @@ var userData = {
     zipCode: "",
     jobQuery: ""
 }
+
+var config = {
+    apiKey: "AIzaSyAnahAvF9gbyHcTnVx3hOlRW05siQNyWUc",
+    authDomain: "dmjls-5efdd.firebaseapp.com",
+    databaseURL: "https://dmjls-5efdd.firebaseio.com",
+    projectId: "dmjls-5efdd",
+    storageBucket: "",
+    messagingSenderId: "897353852395"
+  };
+  firebase.initializeApp(config);
+
+  var database = firebase.database();
+  var keysDB = database.ref("/Keys");
+  var urlsDB = database.ref("/urls");
+
+  console.log(urlsDB.val());
 // function for maxing sure that all the characters in a string are letters and not numbers, symbols, etc
 function validText (string) {
     var text = string.toLowercase();
@@ -36,6 +52,25 @@ function validNumber(number) {
         }
     }
     return isNumber;
+}
+// function for completing the teleport API call
+function retrieveTeleport(){
+
+$.ajax({
+    url: "",
+    method: "GET"
+}).then(function(response){
+    console.log(response);
+    return response;
+});
+}
+
+function retrieveEventful(){
+
+}
+
+function retrieveMaps(){
+
 }
 // function for retrieving the user input data off the DOM
 function getFormData (){
