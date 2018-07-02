@@ -19,21 +19,18 @@ var config = {
   firebase.initializeApp(config);
 
   var database = firebase.database();
-  var keysDB = database.ref("/keys");
   var urlsDB = database.ref("/urls");
-
+  var keysDB = database.ref("/keys");
 
 // function for maxing sure that all the characters in a string are letters and not numbers, symbols, etc
 function validText (string) {
     var text = string.toLowerCase();
     var isValid = true;
-    while(isValid){
         for(var i=0; i < text.length; i++){
-            var char = text.charCodeAt(i);
-            if (char < 0x0061 || char > 0x007A){
-                if(char != 0x0027 || char != 0x002D || char != 0x0020){
-                    isValid = false;
-                }
+        var char = text.charCodeAt(i);
+        if (char < 0x0061 || char > 0x007A){
+            if(char != 0x0027 && char != 0x002D && char != 0x0020){
+                isValid = false;
             }
         }
     }
@@ -55,7 +52,7 @@ function validNumber(number) {
 }
 // function to convert city name to a valid uaID for teleport API
 function convertTeleport (string) {
-    var text = string.toLowercase();
+    var text = string.toLowerCase();
     var newtext = "";
     for (var i=0; i<text.length; i++){
         var char = text.charAt(i);
@@ -68,69 +65,97 @@ function convertTeleport (string) {
     }
     return newtext;
 }
+// function to convert city name to a valid url query for eventful API
+function convertEventful (string) {
+    var text = string.toLowerCase();
+    var newtext = "";
+    for (var i=0; i<text.length; i++){
+        var char = text.charAt(i);
+        if (char === " "){
+            newtext += "+";
+        }
+        else {
+            newtext += char;
+        }
+    }
+    return newtext;
+}
 // function for completing the teleport API call
 function retrieveTeleport(){
-    var url;
-    var key;
-    urlsDB.once('value').then(function(snapshot) {
-        url = snapshot.val().teleport;
-    });
-
-    keysDB.once('value').then(function(snapshot) {
-        key = snapshot.val().teleport;
-    });
-
-    var queryUrl = url + "=" + convertTeleport(userData.city);
-
-      $.ajax({
-        url: queryUrl,
-        method: "GET"
-    }).then(function(response){
-        console.log(response);
-        return response;
+    urlsDB.once("value").then(function(snapshot){
+        var url = snapshot.val().teleport;
+        var queryUrl = url + convertTeleport(userData.city) + "/scores/";
+        console.log(queryUrl);
+        $.ajax({
+            url: queryUrl,
+            method: "GET"
+        }).then(function(response){
+            var data = response.categories;
+            var newDiv = $("<div>");
+            for(var i = 0; i<data.length; i++){
+                var newerDiv = $("<div>");
+                var newHead = $("<header>");
+                newHead.addClass("qoL");
+                newHead.attr("id", "qoL-title-" + i);
+                newHead.html("<h3>" + data[i].name + "</h3>");
+                newerDiv.attr("data-title", data[i].name);
+                var newP = $("<p>");
+                newP.addClass("qoL");
+                newP.attr("id", "qol-value-" + i);
+                newP.text(data[i].score_out_of_10);
+                newerDiv.attr("data-value", data[i].score_out_of_10);
+                newerDiv.append(newHead);
+                newerDiv.append(newP);
+                newDiv.append(newerDiv);
+            }
+            $("#qoL-Board").append(newDiv);
+        });
     });
 }
-
+// function call for handling the ridb API call
 function retrieveRidb(){
-    var url;
-    var key;
-    urlsDB.once('value').then(function(snapshot) {
-        url = snapshot.val().ridb;
-    });
-
-    keysDB.once('value').then(function(snapshot) {
-        key = snapshot.val().ridb;
-    });
-
-    var queryUrl = url + "=" + userData.city + "&";
-
-      $.ajax({
-        url: "",
-        method: "GET"
-    }).then(function(response){
-        console.log(response);
-        return response;
+    database.once("value").then(function(snapshot){
+        var url = snapshot.val().urls.ridb;
+        var key = "apikey=" + snapshot.val().keys.ridb;
+        var queryUrl = url + key + "&full=ture&limit=5&redius=25";
+        console.log(queryUrl);
+        $.ajax({
+            url: queryUrl,
+            method: "GET"
+        }).then(function(response){
+            var data = response.RECDATA;
+            var newDiv = $("<div>");
+            for(var i = 0; i<data.length; i++){
+                var newerDiv = $("<div>");
+                var newHead = $("<header>");
+                newHead.addClass("rec");
+                newHead.attr("id", "rec-title-" + i);
+                newHead.html("<h3>" + data[i].RecAreaName+ "</h3>");
+                newerDiv.attr("data-title", );
+                var newP = $("<p>");
+                newP.addClass("rec");
+                newP.attr("id", "rec-value-" + i);
+                newP.text(data[i].RecAreaDescription);
+                newerDiv.append(newHead);
+                newerDiv.append(newP);
+                newDiv.append(newerDiv);
+            }
+            $("#rec-Board").append(newDiv);
+        });
     });
 }
 function retrieveEventful(){
-    var url;
-    var key;
-    urlsDB.once('value').then(function(snapshot) {
-        url = snapshot.val().eventful;
-    });
-
-    keysDB.once('value').then(function(snapshot) {
-        key = snapshot.eventful.val().eventful;
-    });
-
-    var queryUrl = url + "=" + userData.city + "&";
-
-      $.ajax({
-        url: "",
-        method: "GET"
-    }).then(function(response){
-        console.log(response);
-        return response;
+    database.once("value").then(function(snapshot){
+        var url = snapshot.val().urls.eventful;
+        var key = "app_key=" + snapshot.val().keys.eventful;
+        var queryUrl = url + key + "&location=" + convertEventful(userData.city)+ "&date=future&within=20&page_size=5&page_number=1";
+        console.log(queryUrl);
+        $.ajax({
+            url: queryUrl,
+            method: "GET"
+        }).then(function(response){
+            var data = response;
+        });
     });
 }   
 
@@ -146,15 +171,16 @@ function getFormData (){
     var zipCode = $("#user-zip").val().trim();*/
     var jobQuery = $("#user-query").val().trim();
 
-    if (validText(city) && validText(state) && validText(country) && validText(jobQuery) && validNumber(zipCode)){
+    if (validText(city) && validText(jobQuery)){
         userData.city = city;
 /*        userData.state = state;
         userData.country = country;
         userData.zipCode = zipCode;*/
         userData.jobQuery = jobQuery;
+        console.log(userData);
     }
     else {
-        displayNotValid();
+ //       displayNotValid();
     }
 }
 
@@ -164,7 +190,6 @@ $(document).ready(function(){
         event.preventDefault();
 
         getFormData();
-        var scores = retrieveTeleport();
-        console.log(scores);
+        retrieveTeleport();
     });
 })
