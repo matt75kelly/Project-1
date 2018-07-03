@@ -114,7 +114,7 @@ function retrieveTeleport(){
 }
 // function call for handling the ridb API call
 function retrieveRidb(){
-    database.once("value").then(function(snapshot){
+    database.ref().once("value").then(function(snapshot){
         var url = snapshot.val().urls.ridb;
         var key = "apikey=" + snapshot.val().keys.ridb;
         var queryUrl = url + key + "&full=ture&limit=5&redius=25";
@@ -145,7 +145,7 @@ function retrieveRidb(){
     });
 }
 function retrieveEventful(){
-    database.once("value").then(function(snapshot){
+    database.ref().once("value").then(function(snapshot){
         var url = snapshot.val().urls.eventful;
         var key = "app_key=" + snapshot.val().keys.eventful;
         var queryUrl = url + key + "&location=" + convertTextPlus(userData.city)+ "&date=future&within=20&page_size=5&page_number=1";
