@@ -1,48 +1,78 @@
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project 1</title>
-    <link rel="stylesheet" href="assets/css/foundation.css">
-    <link rel="stylesheet" href="assets/css/app.css">
-  </head>
-  <body>
-      <div class="backgroundimg">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 1</title>
+  <link rel="stylesheet" href="assets/css/foundation.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+
+<body>
+  <div class="backgroundimg">
+
+    <div id="qoL-Board" style="overflow-y: scroll">
+
+    </div>
+
+    <div class="sidebar">
+
+    </div>
+
+  <!-- <div class="mapsDiv"></div> -->
+
+  <div class="jobsDiv">
+jobs
+  </div>
+
+  <div class="eventful">
+    events
+  </div>
+
+<div class="ridb">
+ridb
+</div>
+
+    <form>
+      <div class="row" data-equalizer data-equalize-on="medium">
+        <div class="small-12 medium-6 large-3 columns">
+          <div class="card text-center" data-equalizer-watch>
+            <div class="card-divider">
+              <div class="card-section">
+                <div class="grid-container">
+                  <div class="grid-x grid-padding-x">
+                    <div class="medium-6 cell">
+                      <label class="labelFont">Job
+                        <input id="user-query" type="text" placeholder="Job">
+                      </label>
+                    </div>
+                    <div class="medium-6 cell">
+                      <label class="labelFont">City
+                        <input id="user-city" type="text" placeholder="City">
+                      </label>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <a class="small button submit" href="#0">Search</a>
+    </form>
+    </div>
 
 
-          <form>
-            <div class="row" data-equalizer data-equalize-on="medium">
-              <div class="small-12 medium-6 large-3 columns">
-                <div class="card text-center" data-equalizer-watch>
-                  <div class="card-divider">
-                    <div class="card-section">
-                      <div class="grid-container">
-                        <div class="grid-x grid-padding-x">
-                          <div class="medium-6 cell">
-                            <label class="labelFont">Job
-                              <input id="user-query" type="text" placeholder="Job">
-                            </label>
-                          </div>
-                          <div class="medium-6 cell">
-                            <label class="labelFont">City
-                              <input id="user-city" type="text" placeholder="City">
-                            </label>
-                          </div>
-                          
-                          </div>
-                        </div>
-                      </div>
-                      <a class="small button submit" href="#0">Search</a>
-          </form>
-       
-       
-        </div>
 
 
-   
-    
+
+    <div id="rec-Board" style="overflow-y: scroll">
+
+    </div>
+
+
+
+
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSLsqN8z44jKgX4xaAgv0twaDwuDfSQv8" async defer></script>
     <script src="assets/js/vendor/jquery.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -50,5 +80,6 @@
     <script src="assets/js/vendor/foundation.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
     <script src="assets/js/app.js"></script>
-  </body>
+</body>
+
 </html>
