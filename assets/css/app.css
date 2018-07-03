@@ -10,12 +10,12 @@
 }
 
 
-.submit {
+/* .submit {
     top: 96px;
     position: relative;
     height: 42px;
     
-}
+} */
 
 
 .card-divider {
@@ -53,7 +53,7 @@
 
 
 .labelFont {
-    font-size: 45px;
+    font-size: 1.8rem;
 }
 
 #test {
@@ -65,11 +65,11 @@ body {
 }
 
 #qoL-Board {
-    height: 150px;
+ /*   height: 150px;
     width: 80%;
     text-align: center;
     background-color: white;
-    /* visibility: hidden; */
+    visibility: hidden; */
 }
 
 .sidebar {
