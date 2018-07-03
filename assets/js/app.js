@@ -51,7 +51,7 @@ function validNumber(number) {
     return isNumber;
 }
 // function to convert city name to a valid uaID for teleport API
-function convertTeleport (string) {
+function convertTextDash (string) {
     var text = string.toLowerCase();
     var newtext = "";
     for (var i=0; i<text.length; i++){
@@ -66,7 +66,7 @@ function convertTeleport (string) {
     return newtext;
 }
 // function to convert city name to a valid url query for eventful API
-function convertEventful (string) {
+function convertTextPlus (string) {
     var text = string.toLowerCase();
     var newtext = "";
     for (var i=0; i<text.length; i++){
@@ -84,7 +84,7 @@ function convertEventful (string) {
 function retrieveTeleport(){
     urlsDB.once("value").then(function(snapshot){
         var url = snapshot.val().teleport;
-        var queryUrl = url + convertTeleport(userData.city) + "/scores/";
+        var queryUrl = url + convertTextDash(userData.city) + "/scores/";
         console.log(queryUrl);
         $.ajax({
             url: queryUrl,
@@ -148,17 +148,60 @@ function retrieveEventful(){
     database.once("value").then(function(snapshot){
         var url = snapshot.val().urls.eventful;
         var key = "app_key=" + snapshot.val().keys.eventful;
-        var queryUrl = url + key + "&location=" + convertEventful(userData.city)+ "&date=future&within=20&page_size=5&page_number=1";
+        var queryUrl = url + key + "&location=" + convertTextPlus(userData.city)+ "&date=future&within=20&page_size=5&page_number=1";
         console.log(queryUrl);
         $.ajax({
             url: queryUrl,
             method: "GET"
         }).then(function(response){
             var data = response;
+            console.log(data);
         });
     });
 }   
-
+// function for retreiving the job API data
+function retrieveJobs(){
+    urlsDB.once("value").then(function(snapshot){
+        var url = snapshot.val().careerjet;
+        var queryUrl = url + "pagesize=12&sort=salary&keywords=" + convertTextPlus(userData.jobQuery) + "&page=1&location=" + convertTextPlus(userData.city);
+        console.log(queryUrl);
+        $.ajax({
+            url: queryUrl,
+            method: "GET"
+        }).then(function(response){
+            var data = response.jobs;
+            var newDiv = $("<div>");
+            for(var i = 0; i<data.length; i++){
+                var newerDiv = $("<div>");
+                var newHead = $("<header>");
+                newHead.addClass("job");
+                newHead.attr("id", "job-title-" + i);
+                newHead.html("<h3>" + data[i].title + "</h3>");
+                newerDiv.attr("data-title", data[i].title );
+                var newCompany = $("<h5>");
+                newCompany.text(data[i].company);
+                newCompany.addClass("job");
+                newCompany.attr("id", "job-company-" + data[i].company);
+                newerDiv.attr("data-company", data[i].company);
+                var newP = $("<p>");
+                newP.addClass("job");
+                newP.attr("id", "job-description" + i);
+                newP.text(data[i].description);
+                var newBtn = $("<button>");
+                newBtn.addClass("jobs");
+                newBtn.attr("id", "jobs-btn-" + i);
+                newBtn.html("<a href=" + data[i].url + " target='_blank'> More Info </a>");
+                newBtn.attr("data-site", data[i]);
+                newerDiv.append(newHead);
+                newerDiv.append(newCompany);
+                newerDiv.append(newP);
+                newerDiv.append(newBtn);
+                newDiv.append(newerDiv);
+            }
+            $("#job-Board").append(newDiv);
+        });
+    });
+}  
 function retrieveMaps(){
    
 }
@@ -191,5 +234,8 @@ $(document).ready(function(){
 
         getFormData();
         retrieveTeleport();
+        retrieveRidb();
+        retrieveJobs();
+        retrieveEventful();
     });
 })
