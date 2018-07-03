@@ -109,6 +109,7 @@ function retrieveTeleport(){
                 newDiv.append(newerDiv);
             }
             $("#qoL-Board").append(newDiv);
+           
         });
     });
 }
@@ -140,6 +141,7 @@ function retrieveRidb(){
                 newerDiv.append(newP);
                 newDiv.append(newerDiv);
             }
+            
             $("#rec-Board").append(newDiv);
         });
     });
