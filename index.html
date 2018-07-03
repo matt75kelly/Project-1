@@ -11,7 +11,22 @@
 </head>
 
 <body>
-  <div class="backgroundimg">
+  <h1 id="appTitle">DMJLS: Does My Job Location Satisfy</h1>
+  <div class="grid-container fluid">
+    <div class="grid-x">
+      <div class="grid-y medium-10" style="height: 90vh">
+        <div class="cell medium-2" id="qoL-board" style="background-color: green">
+
+        </div>
+        <div class="grid-x medium-10">
+          <div class="grid-y medium-8" style="height: 75vh">
+            <div class="grid-x medium-7">
+              <div class="cell medium-6" id="map-board" style="background-color: yellow">
+
+
+              </div>
+              <div class="grid-y medium-6" style="height:45vh">
+                <div class="cell medium-6" id="rec-board" style="background-color: red">
 
     <div id="qoL-Board" style="overflow-y: scroll">
 
@@ -54,25 +69,44 @@ ridb
                       </label>
                     </div>
 
-                  </div>
+
+                </div>
+                <div class="cell medium-6" style="background-color: blue">         <form>
+                      <div class="grid-container">
+                        <div class="grid-x">
+                          <div class="cell">
+                            <label class="labelFont">Job
+                              <input type="text" id="user-job" placeholder="Job">
+                            </label>
+                          </div>
+                          <div class="cell">
+                            <label class="labelFont">City
+                              <input type="text" id="user-city" placeholder="City">
+                            </label>
+                          </div>
+                          <input type="submit" class="button submit" value="Search">
+                        </div>
+                      </div>
+                    </form>
                 </div>
               </div>
-              <a class="small button submit" href="#0">Search</a>
-    </form>
+            </div>
+            <div class="cell medium-5" id="event-board" style="background-color: purple">
+
+            </div>
+          </div>
+          <div class="cell medium-4" id="job-board" style="background-color: brown">
+
+          </div>
+        </div>
+      </div>
+      <div class ="cell medium-2" id="fav-board" style="background-color: orange">
+
+      </div>
     </div>
-
-
-
-
-
-    <div id="rec-Board" style="overflow-y: scroll">
-
-    </div>
-
-
-
-
-
+  </div>
+    
+    
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSLsqN8z44jKgX4xaAgv0twaDwuDfSQv8" async defer></script>
     <script src="assets/js/vendor/jquery.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
