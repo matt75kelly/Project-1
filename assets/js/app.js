@@ -115,7 +115,7 @@ function retrieveTeleport(){
 }
 // function call for handling the ridb API call
 function retrieveRidb(){
-    database.once("value").then(function(snapshot){
+    database.ref().once("value").then(function(snapshot){
         var url = snapshot.val().urls.ridb;
         var key = "apikey=" + snapshot.val().keys.ridb;
         var queryUrl = url + key + "&full=ture&limit=5&redius=25";
@@ -147,7 +147,7 @@ function retrieveRidb(){
     });
 }
 function retrieveEventful(){
-    database.once("value").then(function(snapshot){
+    database.ref().once("value").then(function(snapshot){
         var url = snapshot.val().urls.eventful;
         var key = "app_key=" + snapshot.val().keys.eventful;
         var queryUrl = url + key + "&location=" + convertTextPlus(userData.city)+ "&date=future&within=20&page_size=5&page_number=1";
@@ -205,7 +205,16 @@ function retrieveJobs(){
     });
 }  
 function retrieveMaps(){
-   
+    database.ref().once("value").then(function(snapshot){
+        var url = snapshot.val().urls.maps;
+        var key = snapshot.val().keys.maps;
+        var queryUrl = url + key + "&q=" + convertTextPlus(userData.city) + "&maptype=satellite&zoom=18";
+        console.log(queryUrl);
+        var newMap = $("<iframe>");
+        newMap.attr("src", queryUrl);
+        newMap.addClass("map");
+        $("#map-board").append(newMap);
+    });
 }
 // function for retrieving the user input data off the DOM
 function getFormData (){
