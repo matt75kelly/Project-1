@@ -203,7 +203,16 @@ function retrieveJobs(){
     });
 }  
 function retrieveMaps(){
-   
+    database.ref().once("value").then(function(snapshot){
+        var url = snapshot.val().urls.maps;
+        var key = snapshot.val().keys.maps;
+        var queryUrl = url + key + "&q=" + convertTextPlus(userData.city) + "&maptype=satellite&zoom=18";
+        console.log(queryUrl);
+        var newMap = $("<iframe>");
+        newMap.attr("src", queryUrl);
+        newMap.addClass("map");
+        $("#map-board").append(newMap);
+    });
 }
 // function for retrieving the user input data off the DOM
 function getFormData (){
