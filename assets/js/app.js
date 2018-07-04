@@ -161,28 +161,27 @@ function retrieveTeleport(){
             method: "GET"
         }).then(function(response){
             var data = response.categories;
-            console.log(data);
+            console.log(data);      
             var newDiv = $("<div>");
             for(var i = 0; i<data.length; i++){
                 var newerDiv = $("<div>");
-                var newHead = $("<header>");
+                var scoring = Math.floor(data[i].score_out_of_10);
+                var newHead = $("<h3>");
                 newHead.addClass("qoL");
                 newHead.attr("id", "qoL-title-" + i);
-                newHead.html("<h3>" + data[i].name + "</h3>");
+                newHead.text(data[i].name);
                 newerDiv.attr("data-title", data[i].name);
                 var slider = $("<div>");
                 slider.addClass("grid-x margin-x");
                 slider.attr("style", "float: left");
-                var newSlide = $('<input type="range" min="0" max="10" step=".1">');
-                slider.append(newSlide);
-                newSlide.attr("value", Math.floor(data[i].score_out_of_10));
+                slider.html('<div class="slider" data-slider data-initial-start=' + scoring + '> <span class="slider-handle"  data-slider-handle role="slider" tabindex="1" aria-controls="sliderOutput1"></span> <span class="slider-fill" data-slider-fill></span> </div>');
                 slider.addClass("qoL");
-                slider.attr("id", "qol-value-" + i);
-                slider.text(data[i].score_out_of_10);
+                slider.attr("id", "qol-slide-" + i);
                 newerDiv.attr("data-value", data[i].score_out_of_10);
                 newerDiv.append(newHead);
                 newerDiv.append(slider);
                 newDiv.append(newerDiv);
+                newSlide.foundation('_reflow');
             }
             $("#qoL-Board").empty();
             $("#qoL-Board").append(newDiv);
@@ -203,43 +202,23 @@ function retrieveRidb(){
         }).then(function(response){
             var data = response.RECDATA;
             console.log(data);
-            var newDiv = $("<div>");
+            var newPark = $('<ul class="vertical menu accordion-menu" data-accordion-menu>');
             for(var i = 0; i<data.length; i++){
-                var newerDiv = $("<div>");
-                var newHead = $("<header>");
-                newHead.addClass("rec");
-                newHead.attr("id", "rec-title-" + i);
-                newHead.html("<h3>" + data[i].RecAreaName+ "</h3>");
-                newerDiv.attr("data-title", );
-                var newP = $("<p>");
-                newP.addClass("rec");
-                newP.attr("id", "rec-value-" + i);
-                newP.html(data[i].RecAreaDescription);
-                newerDiv.append(newHead);
-                newerDiv.append(newP);
-                newDiv.append(newerDiv);
+                var newList = $("<li>");
+                newList.addClass("rec-event-"+i);
+                newList.attr("data-place", data.RecAreaName);
+                newList.html('<a href="#"><h6>' + data.RecAreaName + '</h6></a>');
+                var newSub = $("<ul>");
+                newSub.addClass("menu vertical nested");
+                newSub.html('<li><a href="#">' + data.RecAreaDescription + '</a></li>');
+                newList.append(newSub);
+                newPark.append(newList);
             }
             $("#rec-Board").empty();            
             $("#rec-Board").append(newDiv);
         });
     });
-}
-function retrieveEventful(){
-    $()
-    database.ref().once("value").then(function(snapshot){
-        var url = snapshot.val().urls.eventful;
-        var key = "app_key=" + snapshot.val().keys.eventful;
-        var queryUrl = url + key + "&location=" + convertTextPlus(userData.city)+ "&date=future&within=20&page_size=3&page_number=1";
-        console.log(queryUrl);
-        $.ajax({
-            url: queryUrl,
-            method: "GET"
-        }).then(function(response){
-            var data = response;
-            console.log(data);
-        });
-    });
-}   
+}  
 // function for retreiving the job API data
 function retrieveJobs(){
     urlsDB.once("value").then(function(snapshot){
