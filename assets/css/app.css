@@ -1,5 +1,64 @@
+<<<<<<< HEAD
 .labelFont {
     font-size: 1.6rem;
+=======
+.card {
+   
+   
+    position: relative;
+    top: 249px;
+    width: 56%;
+    margin: auto;
+    margin-top: -20%;
+    left: -274px;
+}
+
+
+/* .submit {
+    top: 96px;
+    position: relative;
+    height: 42px;
+    
+} */
+
+
+.card-divider {
+   /* margin: 25px; */
+   height: 225px;
+   padding: -10px;
+
+}
+
+.jobsDiv {
+  
+    height: 476px;
+    width: 24%;
+    background-color: orange;
+    position: absolute;
+    left: 56%;
+}
+
+.eventful {
+    width: 56%;
+    height: 250px;
+    background-color: yellow;
+    position: absolute;
+    top: 377px; 
+}
+
+.ridb {
+    height: 150px;
+    width: 80%;
+    position: absolute;
+    top: 550px;
+    background-color: white;
+}
+
+
+
+.labelFont {
+    font-size: 1.8rem;
+>>>>>>> 06944d5fdb07885fe81917102b0bcdcda8a0618d
 }
 
 #test {
@@ -9,3 +68,30 @@
 body {
     background-image: url("../images/joblisting.jpg");
 }
+<<<<<<< HEAD
+=======
+
+#qoL-Board {
+ /*   height: 150px;
+    width: 80%;
+    text-align: center;
+    background-color: white;
+    visibility: hidden; */
+}
+
+.sidebar {
+    background-color: black;
+    width: 20%;
+    height:100%;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    border-style: solid;  
+}
+
+.mapsDiv {
+    height: 250px;
+    width: 24%;
+    background-color: blue;
+}
+>>>>>>> 06944d5fdb07885fe81917102b0bcdcda8a0618d

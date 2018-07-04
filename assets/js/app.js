@@ -193,7 +193,7 @@ function retrieveRidb(){
     database.ref().once("value").then(function(snapshot){
         var url = snapshot.val().urls.ridb;
         var key = "apikey=" + snapshot.val().keys.ridb;
-        var queryUrl = url + key + "&full=ture&limit=5&redius=25";
+        var queryUrl = url + key + "&full=true&limit=3&radius=25";
         console.log(queryUrl);
         $.ajax({
             url: queryUrl,
@@ -211,7 +211,7 @@ function retrieveRidb(){
                 var newP = $("<p>");
                 newP.addClass("rec");
                 newP.attr("id", "rec-value-" + i);
-                newP.text(data[i].RecAreaDescription);
+                newP.html(data[i].RecAreaDescription);
                 newerDiv.append(newHead);
                 newerDiv.append(newP);
                 newDiv.append(newerDiv);
@@ -225,7 +225,7 @@ function retrieveEventful(){
     database.ref().once("value").then(function(snapshot){
         var url = snapshot.val().urls.eventful;
         var key = "app_key=" + snapshot.val().keys.eventful;
-        var queryUrl = url + key + "&location=" + convertTextPlus(userData.city)+ "&date=future&within=20&page_size=5&page_number=1";
+        var queryUrl = url + key + "&location=" + convertTextPlus(userData.city)+ "&date=future&within=20&page_size=3&page_number=1";
         console.log(queryUrl);
         $.ajax({
             url: queryUrl,
@@ -240,7 +240,7 @@ function retrieveEventful(){
 function retrieveJobs(){
     urlsDB.once("value").then(function(snapshot){
         var url = snapshot.val().careerjet;
-        var queryUrl = url + "pagesize=12&sort=salary&keywords=" + convertTextPlus(userData.jobQuery) + "&page=1&location=" + convertTextPlus(userData.city);
+        var queryUrl = url + "pagesize=8&sort=salary&keywords=" + convertTextPlus(userData.jobQuery) + "&page=1&location=" + convertTextPlus(userData.city);
         console.log(queryUrl);
         $.ajax({
             url: queryUrl,
