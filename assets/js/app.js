@@ -175,7 +175,7 @@ function retrieveTeleport(){
                 slider.attr("style", "float: left");
                 var newSlide = $('<input type="range" min="0" max="10" step=".1">');
                 slider.append(newSlide);
-                newSlide.attr("value", data[i].score_out_of_10);
+                newSlide.attr("value", Math.floor(data[i].score_out_of_10));
                 slider.addClass("qoL");
                 slider.attr("id", "qol-value-" + i);
                 slider.text(data[i].score_out_of_10);
@@ -184,6 +184,7 @@ function retrieveTeleport(){
                 newerDiv.append(slider);
                 newDiv.append(newerDiv);
             }
+            $("#qoL-Board").empty();
             $("#qoL-Board").append(newDiv);
            
         });
@@ -218,12 +219,13 @@ function retrieveRidb(){
                 newerDiv.append(newP);
                 newDiv.append(newerDiv);
             }
-            
+            $("#rec-Board").empty();            
             $("#rec-Board").append(newDiv);
         });
     });
 }
 function retrieveEventful(){
+    $()
     database.ref().once("value").then(function(snapshot){
         var url = snapshot.val().urls.eventful;
         var key = "app_key=" + snapshot.val().keys.eventful;
@@ -277,6 +279,7 @@ function retrieveJobs(){
                 newerDiv.append(newBtn);
                 newDiv.append(newerDiv);
             }
+            $("#job-Board").empty();
             $("#job-Board").append(newDiv);
         });
     });
@@ -290,6 +293,7 @@ function retrieveMaps(){
         var newMap = $("<iframe>");
         newMap.attr("src", queryUrl);
         newMap.addClass("map");
+        $("#map-Board").empty();
         $("#map-Board").append(newMap);
     });
 }
