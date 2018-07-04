@@ -1,10 +1,62 @@
 $(document).foundation()
 
+var states = [
+    "ALABAMA	AL",
+    "ALASKA	AK",
+    "ARIZONA	AZ",
+    "ARKANSAS	AR",
+    "CALIFORNIA	CA",
+    "COLORADO	CO",
+    "CONNECTICUT	CT",
+    "DELAWARE	DE",
+    "FLORIDA	FL",
+    "GEORGIA	GA",
+    "HAWAII	HI",
+    "IDAHO	ID",
+    "ILLINOIS	IL",
+    "INDIANA	IN",
+    "IOWA	IA",
+    "KANSAS	KS",
+    "KENTUCKY	KY",
+    "LOUISIANA	LA",
+    "MAINE	ME",
+    "MARYLAND	MD",
+    "MASSACHUSETTS	MA",
+    "MICHIGAN	MI",
+    "MINNESOTA	MN",
+    "MISSISSIPPI	MS",
+    "MISSOURI	MO",
+    "MONTANA	MT",
+    "NEBRASKA	NE",
+    "NEVADA	NV",
+    "NEW HAMPSHIRE	NH",
+    "NEW JERSEY	NJ",
+    "NEW MEXICO	NM",
+    "NEW YORK	NY",
+    "NORTH CAROLINA	NC",
+    "NORTH DAKOTA	ND",
+    "OHIO	OH",
+    "OKLAHOMA	OK",
+    "OREGON	OR",
+    "PENNSYLVANIA	PA",
+    "RHODE ISLAND	RI",
+    "SOUTH CAROLINA	SC",
+    "SOUTH DAKOTA	SD",
+    "TENNESSEE	TN",
+    "TEXAS	TX",
+    "UTAH	UT",
+    "VERMONT	VT",
+    "VIRGINIA	VA",
+    "WASHINGTON	WA",
+    "WEST VIRGINIA	WV",
+    "WISCONSIN	WI",
+    "WYOMING	WY"
+];
+
 var userData = {
     city: "",
     state: "",
-    country: "",
-    zipCode: "",
+    // zipCode: "",
     jobQuery: ""
 }
 
@@ -49,6 +101,24 @@ function validNumber(number) {
         }
     }
     return isNumber;
+}
+// function to convert state to a 2 character abbreviation
+function validState(string){
+    var object = {
+        isValid : false,
+        converted : ""
+    }
+    var state = string.toUpperCase();
+    for(var i=0; i<states.length; i++){
+        var temp = states[i].slice(0, states[i].length - 3);
+        var code = states[i].slice(-2);
+        if(temp === state || code === state){
+            object.converted = code;
+            object.isValid = true;
+        }
+    }
+    console.log(object);
+    return object;
 }
 // function to convert city name to a valid uaID for teleport API
 function convertTextDash (string) {
@@ -99,13 +169,18 @@ function retrieveTeleport(){
                 newHead.attr("id", "qoL-title-" + i);
                 newHead.html("<h3>" + data[i].name + "</h3>");
                 newerDiv.attr("data-title", data[i].name);
-                var newP = $("<p>");
+                var slider = $("<div>");
+                slider.addClass("grid-x margin-x");
+                slider.attr("style", "float: left");
+                var newSlide = $('<input type="range" min="0" max="10" step=".1">');
+                slider.append(newSlide);
+                newSlide.attr("value", data[i].score_out_of_10);
                 newP.addClass("qoL");
                 newP.attr("id", "qol-value-" + i);
                 newP.text(data[i].score_out_of_10);
                 newerDiv.attr("data-value", data[i].score_out_of_10);
                 newerDiv.append(newHead);
-                newerDiv.append(newP);
+                newerDiv.append(slider);
                 newDiv.append(newerDiv);
             }
             $("#qoL-Board").append(newDiv);
@@ -220,16 +295,15 @@ function retrieveMaps(){
 function getFormData (){
     // Using Input ID's from the Form Group Input Elements
     var city = $("#user-city").val().trim();
-/*    var state = $("#user-state").val().trim();
-    var country = $("#user-country").val().trim();
-    var zipCode = $("#user-zip").val().trim();*/
-    var jobQuery = $("#user-query").val().trim();
+    var state = $("#user-state").val().trim();
+//    var zipCode = $("#user-zip").val().trim();*/
+    var jobQuery = $("#user-job").val().trim();
+    var stateCode = validState(state);
 
-    if (validText(city) && validText(jobQuery)){
+    if (validText(city) && validText(jobQuery) && stateCode.isValid){
         userData.city = city;
-/*        userData.state = state;
-        userData.country = country;
-        userData.zipCode = zipCode;*/
+        userData.state = stateCode.converted;
+        // userData.zipCode = zipCode;
         userData.jobQuery = jobQuery;
         console.log(userData);
     }
