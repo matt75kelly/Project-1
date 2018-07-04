@@ -290,7 +290,7 @@ function retrieveMaps(){
         var newMap = $("<iframe>");
         newMap.attr("src", queryUrl);
         newMap.addClass("map");
-        $("#map-board").append(newMap);
+        $("#map-Board").append(newMap);
     });
 }
 // function for retrieving the user input data off the DOM
@@ -324,6 +324,6 @@ $(document).ready(function(){
         retrieveRidb();
         retrieveJobs();
         retrieveEventful();
-        retrieveMaps();
+        // retrieveMaps();
     });
 })
