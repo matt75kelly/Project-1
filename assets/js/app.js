@@ -161,6 +161,7 @@ function retrieveTeleport(){
             method: "GET"
         }).then(function(response){
             var data = response.categories;
+            console.log(data);
             var newDiv = $("<div>");
             for(var i = 0; i<data.length; i++){
                 var newerDiv = $("<div>");
@@ -175,9 +176,9 @@ function retrieveTeleport(){
                 var newSlide = $('<input type="range" min="0" max="10" step=".1">');
                 slider.append(newSlide);
                 newSlide.attr("value", data[i].score_out_of_10);
-                newP.addClass("qoL");
-                newP.attr("id", "qol-value-" + i);
-                newP.text(data[i].score_out_of_10);
+                slider.addClass("qoL");
+                slider.attr("id", "qol-value-" + i);
+                slider.text(data[i].score_out_of_10);
                 newerDiv.attr("data-value", data[i].score_out_of_10);
                 newerDiv.append(newHead);
                 newerDiv.append(slider);
@@ -200,6 +201,7 @@ function retrieveRidb(){
             method: "GET"
         }).then(function(response){
             var data = response.RECDATA;
+            console.log(data);
             var newDiv = $("<div>");
             for(var i = 0; i<data.length; i++){
                 var newerDiv = $("<div>");
@@ -322,5 +324,6 @@ $(document).ready(function(){
         retrieveRidb();
         retrieveJobs();
         retrieveEventful();
+        retrieveMaps();
     });
 })
