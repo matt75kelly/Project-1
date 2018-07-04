@@ -1,0 +1,65 @@
+function retrieveTeleport(){
+    urlsDB.once("value").then(function(snapshot){
+        var url = snapshot.val().teleport;
+        var queryUrl = url + convertTextDash(userData.city) + "/scores/";
+        console.log(queryUrl);
+        $.ajax({
+            url: queryUrl,
+            method: "GET"
+        }).then(function(response){
+            var data = response.categories;
+            var newDiv = $("<div>");
+            for(var i = 0; i<data.length; i++){
+                var newerDiv = $("<div>");
+                var newHead = $("<header>");
+                newHead.addClass("qoL");
+                newHead.attr("id", "qoL-title-" + i);
+                newHead.html("<h3>" + data[i].name + "</h3>");
+                newerDiv.attr("data-title", data[i].name);
+                var slider = $("<div>");
+                slider.addClass("grid-x margin-x");
+                slider.attr("style", "float: left");
+                var newSlide = $('<input type="range" min="0" max="10" step=".1">');
+                slider.append(newSlide);
+                newSlide.attr("value", data[i].score_out_of_10);
+                newP.addClass("qoL");
+                newP.attr("id", "qol-value-" + i);
+                newP.text(data[i].score_out_of_10);
+                newerDiv.attr("data-value", data[i].score_out_of_10);
+                newerDiv.append(newHead);
+                newerDiv.append(slider);
+                newDiv.append(newerDiv);
+            }
+            $("#qoL-Board").append(newDiv);
+           
+        });
+    });
+}
+
+
+<div class="cell medium-2" id="rec-board" style="background-color: red">
+
+                </div>
+                <div class="cell" style="background-color: blue">         <form>
+                      <div class="grid-container">
+                        <div class="grid-x">
+                          <div class="cell">
+                            <label class="labelFont">Job
+                              <input type="text" id="user-job" placeholder="Job">
+                            </label>
+                          </div>
+                          <div class="cell">
+                            <label class="labelFont">City
+                              <input type="text" id="user-city" placeholder="City">
+                            </label>
+                          </div>
+                          <div class="cell">
+                            <label class="labelFont">State
+                              <input type="text" id="user-state" placeholder="State">
+                            </label>
+                          </div>
+                          <input type="submit" class="button submit" value="Search">
+                        </div>
+                      </div>
+                    </form>
+                </div>
