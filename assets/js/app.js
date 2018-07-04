@@ -1,10 +1,62 @@
 $(document).foundation()
 
+var states = [
+    "ALABAMA	AL",
+    "ALASKA	AK",
+    "ARIZONA	AZ",
+    "ARKANSAS	AR",
+    "CALIFORNIA	CA",
+    "COLORADO	CO",
+    "CONNECTICUT	CT",
+    "DELAWARE	DE",
+    "FLORIDA	FL",
+    "GEORGIA	GA",
+    "HAWAII	HI",
+    "IDAHO	ID",
+    "ILLINOIS	IL",
+    "INDIANA	IN",
+    "IOWA	IA",
+    "KANSAS	KS",
+    "KENTUCKY	KY",
+    "LOUISIANA	LA",
+    "MAINE	ME",
+    "MARYLAND	MD",
+    "MASSACHUSETTS	MA",
+    "MICHIGAN	MI",
+    "MINNESOTA	MN",
+    "MISSISSIPPI	MS",
+    "MISSOURI	MO",
+    "MONTANA	MT",
+    "NEBRASKA	NE",
+    "NEVADA	NV",
+    "NEW HAMPSHIRE	NH",
+    "NEW JERSEY	NJ",
+    "NEW MEXICO	NM",
+    "NEW YORK	NY",
+    "NORTH CAROLINA	NC",
+    "NORTH DAKOTA	ND",
+    "OHIO	OH",
+    "OKLAHOMA	OK",
+    "OREGON	OR",
+    "PENNSYLVANIA	PA",
+    "RHODE ISLAND	RI",
+    "SOUTH CAROLINA	SC",
+    "SOUTH DAKOTA	SD",
+    "TENNESSEE	TN",
+    "TEXAS	TX",
+    "UTAH	UT",
+    "VERMONT	VT",
+    "VIRGINIA	VA",
+    "WASHINGTON	WA",
+    "WEST VIRGINIA	WV",
+    "WISCONSIN	WI",
+    "WYOMING	WY"
+];
+
 var userData = {
     city: "",
     state: "",
-    country: "",
-    zipCode: "",
+    // zipCode: "",
     jobQuery: ""
 }
 
@@ -50,6 +102,24 @@ function validNumber(number) {
     }
     return isNumber;
 }
+// function to convert state to a 2 character abbreviation
+function validState(string){
+    var object = {
+        isValid : false,
+        converted : ""
+    }
+    var state = string.toUpperCase();
+    for(var i=0; i<states.length; i++){
+        var temp = states[i].slice(0, states[i].length - 3);
+        var code = states[i].slice(-2);
+        if(temp === state || code === state){
+            object.converted = code;
+            object.isValid = true;
+        }
+    }
+    console.log(object);
+    return object;
+}
 // function to convert city name to a valid uaID for teleport API
 function convertTextDash (string) {
     var text = string.toLowerCase();
@@ -91,6 +161,7 @@ function retrieveTeleport(){
             method: "GET"
         }).then(function(response){
             var data = response.categories;
+            console.log(data);
             var newDiv = $("<div>");
             for(var i = 0; i<data.length; i++){
                 var newerDiv = $("<div>");
@@ -99,13 +170,18 @@ function retrieveTeleport(){
                 newHead.attr("id", "qoL-title-" + i);
                 newHead.html("<h3>" + data[i].name + "</h3>");
                 newerDiv.attr("data-title", data[i].name);
-                var newP = $("<p>");
-                newP.addClass("qoL");
-                newP.attr("id", "qol-value-" + i);
-                newP.text(data[i].score_out_of_10);
+                var slider = $("<div>");
+                slider.addClass("grid-x margin-x");
+                slider.attr("style", "float: left");
+                var newSlide = $('<input type="range" min="0" max="10" step=".1">');
+                slider.append(newSlide);
+                newSlide.attr("value", data[i].score_out_of_10);
+                slider.addClass("qoL");
+                slider.attr("id", "qol-value-" + i);
+                slider.text(data[i].score_out_of_10);
                 newerDiv.attr("data-value", data[i].score_out_of_10);
                 newerDiv.append(newHead);
-                newerDiv.append(newP);
+                newerDiv.append(slider);
                 newDiv.append(newerDiv);
             }
             $("#qoL-Board").append(newDiv);
@@ -118,13 +194,14 @@ function retrieveRidb(){
     database.ref().once("value").then(function(snapshot){
         var url = snapshot.val().urls.ridb;
         var key = "apikey=" + snapshot.val().keys.ridb;
-        var queryUrl = url + key + "&full=ture&limit=5&redius=25";
+        var queryUrl = url + key + "&full=true&limit=3&radius=25";
         console.log(queryUrl);
         $.ajax({
             url: queryUrl,
             method: "GET"
         }).then(function(response){
             var data = response.RECDATA;
+            console.log(data);
             var newDiv = $("<div>");
             for(var i = 0; i<data.length; i++){
                 var newerDiv = $("<div>");
@@ -136,7 +213,7 @@ function retrieveRidb(){
                 var newP = $("<p>");
                 newP.addClass("rec");
                 newP.attr("id", "rec-value-" + i);
-                newP.text(data[i].RecAreaDescription);
+                newP.html(data[i].RecAreaDescription);
                 newerDiv.append(newHead);
                 newerDiv.append(newP);
                 newDiv.append(newerDiv);
@@ -150,7 +227,7 @@ function retrieveEventful(){
     database.ref().once("value").then(function(snapshot){
         var url = snapshot.val().urls.eventful;
         var key = "app_key=" + snapshot.val().keys.eventful;
-        var queryUrl = url + key + "&location=" + convertTextPlus(userData.city)+ "&date=future&within=20&page_size=5&page_number=1";
+        var queryUrl = url + key + "&location=" + convertTextPlus(userData.city)+ "&date=future&within=20&page_size=3&page_number=1";
         console.log(queryUrl);
         $.ajax({
             url: queryUrl,
@@ -165,7 +242,7 @@ function retrieveEventful(){
 function retrieveJobs(){
     urlsDB.once("value").then(function(snapshot){
         var url = snapshot.val().careerjet;
-        var queryUrl = url + "pagesize=12&sort=salary&keywords=" + convertTextPlus(userData.jobQuery) + "&page=1&location=" + convertTextPlus(userData.city);
+        var queryUrl = url + "pagesize=8&sort=salary&keywords=" + convertTextPlus(userData.jobQuery) + "&page=1&location=" + convertTextPlus(userData.city);
         console.log(queryUrl);
         $.ajax({
             url: queryUrl,
@@ -220,16 +297,15 @@ function retrieveMaps(){
 function getFormData (){
     // Using Input ID's from the Form Group Input Elements
     var city = $("#user-city").val().trim();
-/*    var state = $("#user-state").val().trim();
-    var country = $("#user-country").val().trim();
-    var zipCode = $("#user-zip").val().trim();*/
-    var jobQuery = $("#user-query").val().trim();
+    var state = $("#user-state").val().trim();
+//    var zipCode = $("#user-zip").val().trim();*/
+    var jobQuery = $("#user-job").val().trim();
+    var stateCode = validState(state);
 
-    if (validText(city) && validText(jobQuery)){
+    if (validText(city) && validText(jobQuery) && stateCode.isValid){
         userData.city = city;
-/*        userData.state = state;
-        userData.country = country;
-        userData.zipCode = zipCode;*/
+        userData.state = stateCode.converted;
+        // userData.zipCode = zipCode;
         userData.jobQuery = jobQuery;
         console.log(userData);
     }
@@ -248,5 +324,6 @@ $(document).ready(function(){
         retrieveRidb();
         retrieveJobs();
         retrieveEventful();
+        retrieveMaps();
     });
 })
