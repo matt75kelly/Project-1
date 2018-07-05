@@ -113,7 +113,7 @@ function validState(string){
         var temp = states[i].slice(0, states[i].length - 3);
         var code = states[i].slice(-2);
         if(temp === state || code === state){
-            object.converted = code;
+            object.converted = code.toLowerCase();
             object.isValid = true;
         }
     }
@@ -163,29 +163,26 @@ function retrieveTeleport(){
             var data = response.categories;
             console.log(data);      
             var newDiv = $("<div>");
+            newDiv.addClass("grid-x");
             for(var i = 0; i<data.length; i++){
-                var newerDiv = $("<div>");
-                var scoring = Math.floor(data[i].score_out_of_10);
-                var newHead = $("<h3>");
-                newHead.addClass("qoL");
-                newHead.attr("id", "qoL-title-" + i);
-                newHead.text(data[i].name);
-                newerDiv.attr("data-title", data[i].name);
-                var slider = $("<div>");
-                slider.addClass("grid-x margin-x");
-                slider.attr("style", "float: left");
-                slider.html('<div class="slider" data-slider data-initial-start=' + scoring + '> <span class="slider-handle"  data-slider-handle role="slider" tabindex="1" aria-controls="sliderOutput1"></span> <span class="slider-fill" data-slider-fill></span> </div>');
-                slider.addClass("qoL");
-                slider.attr("id", "qol-slide-" + i);
-                newerDiv.attr("data-value", data[i].score_out_of_10);
-                newerDiv.append(newHead);
-                newerDiv.append(slider);
+                var scoring = Math.floor(data[i].score_out_of_10 * 10);
+                var title = $("<h5>");
+                title.addClass("text-center");
+                title.text(data[i].name);
+                var slide = '<div class="slider" data-slider data-start="0" data-end="100" data-dragga le="false" id="slider-' + i + '" aria-controls="input-' + i + '"><span class="slider-handle"  data-slider-handle role="slider" tabindex="1"></span><span class="slider-fill" data-slider-fill></span><input type="hidden" id="input-' + i + '"></div>';
+                newerDiv = $("<div>");
+                newerDiv.addClass("cell small-2 text-center");
+                newerDiv.html(slide);
+                newerDiv.prepend(title);
+                newerDiv.attr("style", "float: left");
                 newDiv.append(newerDiv);
-                newSlide.foundation('_reflow');
             }
             $("#qoL-Board").empty();
-            $("#qoL-Board").append(newDiv);
-           
+            $("#qoL-Board").append(newDiv);   
+            $("#qoL-Board").attr("style", "background-color:white");
+            for(var j=0; j<data.length; j++){
+                $('#input-' + j).val(scoring);
+            }    
         });
     });
 }
@@ -202,20 +199,17 @@ function retrieveRidb(){
         }).then(function(response){
             var data = response.RECDATA;
             console.log(data);
-            var newPark = $('<ul class="vertical menu accordion-menu" data-accordion-menu>');
+            var newPark = $('<ul data-accordion-menu>');
+            newPark.addClass("vertical menu accordion-menu");
             for(var i = 0; i<data.length; i++){
                 var newList = $("<li>");
-                newList.addClass("rec-event-"+i);
-                newList.attr("data-place", data.RecAreaName);
-                newList.html('<a href="#"><h6>' + data.RecAreaName + '</h6></a>');
-                var newSub = $("<ul>");
-                newSub.addClass("menu vertical nested");
-                newSub.html('<li><a href="#">' + data.RecAreaDescription + '</a></li>');
-                newList.append(newSub);
+                newList.html('<a href="#"><h5>' + data[i].RecAreaName + '</h5></a><ul class="menu vertical nested"><li><a href="#">' + data[i].RecAreaDescription + '</a></li></ul>');
                 newPark.append(newList);
             }
             $("#rec-Board").empty();            
-            $("#rec-Board").append(newDiv);
+            $("#rec-Board").append(newPark);
+            $("#rec-Board").attr("style", "background-color:white");
+
         });
     });
 }  
@@ -223,7 +217,7 @@ function retrieveRidb(){
 function retrieveJobs(){
     urlsDB.once("value").then(function(snapshot){
         var url = snapshot.val().careerjet;
-        var queryUrl = url + "pagesize=8&sort=salary&keywords=" + convertTextPlus(userData.jobQuery) + "&page=1&location=" + convertTextPlus(userData.city);
+        var queryUrl = url + "pagesize=8&keywords=" + convertTextPlus(userData.jobQuery) + "&page=124&location=" + convertTextPlus(userData.city) + "," + userData.state;
         console.log(queryUrl);
         $.ajax({
             url: queryUrl,
@@ -306,7 +300,6 @@ $(document).ready(function(){
         retrieveTeleport();
         retrieveRidb();
         retrieveJobs();
-        retrieveEventful();
         // retrieveMaps();
     });
 })
