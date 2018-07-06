@@ -1,5 +1,3 @@
-$(document).foundation()
-
 var states = [
     "ALABAMA	AL",
     "ALASKA	AK",
@@ -312,11 +310,14 @@ function getFormData (){
         console.log(userData);
     }
     else {
- //       displayNotValid();
+    $("#user-city").val("");
+    $("#user-state").val("");
+    $("#user-job").val("");
     }
 }
 
 $(document).ready(function(){
+    $(document).foundation()
     // Using Class ID of Submit Button to trigger an Event Handler for Retrieving the Data from the Form Elements
     $(document).on("click", ".submit", function(event){
         event.preventDefault();
