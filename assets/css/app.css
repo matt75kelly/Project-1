@@ -9,14 +9,3 @@
 body {
     background-image: url("../images/joblisting.jpg");
 }
-
-#rec-Board {
-    overflow-y: scroll;
-}
-#event-board {
-    overflow-y: scroll;
-}
-
-#qoL-Board {
-    overflow-y: scroll;
-}
