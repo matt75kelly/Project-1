@@ -289,7 +289,7 @@ function retrieveMaps(){
             newMap.attr("width", "90%");
             newMap.attr("height", "90%");
             newMap.attr("src", queryUrl);
-            newMap.addClass("map text-center");
+            newMap.addClass("map ");
             $("#map-Board").empty();
             $("#map-Board").append(newMap);
         });
