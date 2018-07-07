@@ -184,10 +184,10 @@ function retrieveTeleport(){
                 title.addClass("text-center");
                 title.text(data[i].name);
                 var scoring = Math.floor(data[i].score_out_of_10 * 10);
-                if(scoring < 25) newerDiv.attr("style", "color: red; float: left");
-                if(scoring >= 25 && scoring < 50) newerDiv.attr("style", "color: orange; float: left");
-                if(scoring >= 50 && scoring < 75) newerDiv.attr("style", "color: #F4D03F; float: left");
-                if(scoring >= 75) newerDiv.attr("style", "color: green; float: left");
+                if(scoring < 25) newerDiv.attr("style", "color: red; float: left; font-size: 1rem");
+                if(scoring >= 25 && scoring < 50) newerDiv.attr("style", "color: orange; float: left; font-size: 1rem");
+                if(scoring >= 50 && scoring < 75) newerDiv.attr("style", "color: #F4D03F; float: left; font-size: 1rem");
+                if(scoring >= 75) newerDiv.attr("style", "color: green; float: left; font-size: 1rem");
                 
                 newerDiv.text(scoring);
                 newerDiv.addClass("cell small-2 text-center");
@@ -196,11 +196,7 @@ function retrieveTeleport(){
             }
             
             $("#qoL-Board").append(newDiv);   
-            $("#qoL-Board").attr("style", "background-color:white");
-            for(var j=0; j<data.length; j++){
-                var scored = Math.floor(data[j].score_out_of_10 * 10);
-                $('#input-' + j).val(score);
-            }    
+            $("#qoL-Board").attr("style", "background-color:white");   
         });
     });
 }
@@ -246,6 +242,17 @@ function retrieveRidb(){
 function retrieveJobs(){
     $("#job-Board").empty();
     urlsDB.once("value").then(function(snapshot){
+        jQuery.ajaxPrefilter(function (options) {
+
+            if (options.crossDomain && jQuery.support.cors) {
+                options.url = 'https://cors-anywhere.herokuapp.com/' + options.url;
+            }
+        });jQuery.ajaxPrefilter(function (options) {
+ 
+            if (options.crossDomain && jQuery.support.cors) {
+                options.url = 'https://cors-anywhere.herokuapp.com/' + options.url;
+            }
+        });
         var url = snapshot.val().careerjet;
         var queryUrl = url + "pagesize=10&keywords=" + convertTextPlus(userData.jobQuery) + "&page=124&location=" + convertTextPlus(userData.city) + "," + userData.state;
         console.log(queryUrl);
