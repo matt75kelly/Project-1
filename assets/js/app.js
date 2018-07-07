@@ -179,23 +179,27 @@ function retrieveTeleport(){
             var newDiv = $("<div>");
             newDiv.addClass("grid-x grid-margin-x");
             for(var i = 0; i<data.length; i++){
-                var scoring = Math.floor(data[i].score_out_of_10 * 10);
-                var title = $("<h5>");
+                var newerDiv = $("<div>");
+                var title = $("<h3>");
                 title.addClass("text-center");
                 title.text(data[i].name);
-                var slide = '<div class="slider" data-slider data-start="0" data-end="100" id="slider-' + i + '" data-initial-start =' + scoring + 'aria-controls="input-' + i + '"><span class="slider-handle"  data-slider-handle role="slider" tabindex="1"></span><span class="slider-fill" data-slider-fill></span><input type="hidden" id="input-' + i + '"></div>';
-                newerDiv = $("<div>");
+                var scoring = Math.floor(data[i].score_out_of_10 * 10);
+                if(scoring < 25) newerDiv.attr("style", "color: red; float: left");
+                if(scoring >= 25 && scoring < 50) newerDiv.attr("style", "color: orange; float: left");
+                if(scoring >= 50 && scoring < 75) newerDiv.attr("style", "color: #F4D03F; float: left");
+                if(scoring >= 75) newerDiv.attr("style", "color: green; float: left");
+                
+                newerDiv.text(scoring);
                 newerDiv.addClass("cell small-2 text-center");
-                newerDiv.html(slide);
                 newerDiv.prepend(title);
-                newerDiv.attr("style", "float: left");
                 newDiv.append(newerDiv);
             }
             
             $("#qoL-Board").append(newDiv);   
             $("#qoL-Board").attr("style", "background-color:white");
             for(var j=0; j<data.length; j++){
-                $('#input-' + j).val(scoring);
+                var scored = Math.floor(data[j].score_out_of_10 * 10);
+                $('#input-' + j).val(score);
             }    
         });
     });
