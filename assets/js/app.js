@@ -148,8 +148,24 @@ function convertTextPlus (string) {
     }
     return newtext;
 }
+// function that parses through a string and removes the html tags
+function removeTags(string){
+    var isKept = true;
+    var convertedString ="";
+    var st = "<";
+    var en = ">";
+
+    for(var i =0; i<string.length; i++){
+        var char = string.charAt(i);
+        if (char === st) isKept = false;
+        if (isKept) convertedString = convertedString + char;
+        if (char === en) isKept = true;
+    }
+    return convertedString;
+}
 // function for completing the teleport API call
 function retrieveTeleport(){
+    $("#qoL-Board").empty();
     urlsDB.once("value").then(function(snapshot){
         var url = snapshot.val().teleport;
         var queryUrl = url + convertTextDash(userData.city) + "/scores/";
@@ -161,13 +177,13 @@ function retrieveTeleport(){
             var data = response.categories;
             console.log(data);      
             var newDiv = $("<div>");
-            newDiv.addClass("grid-x");
+            newDiv.addClass("grid-x grid-margin-x");
             for(var i = 0; i<data.length; i++){
                 var scoring = Math.floor(data[i].score_out_of_10 * 10);
                 var title = $("<h5>");
                 title.addClass("text-center");
                 title.text(data[i].name);
-                var slide = '<div class="slider" data-slider data-start="0" data-end="100" data-dragga le="false" id="slider-' + i + '" aria-controls="input-' + i + '"><span class="slider-handle"  data-slider-handle role="slider" tabindex="1"></span><span class="slider-fill" data-slider-fill></span><input type="hidden" id="input-' + i + '"></div>';
+                var slide = '<div class="slider" data-slider data-start="0" data-end="100" id="slider-' + i + '" data-initial-start =' + scoring + 'aria-controls="input-' + i + '"><span class="slider-handle"  data-slider-handle role="slider" tabindex="1"></span><span class="slider-fill" data-slider-fill></span><input type="hidden" id="input-' + i + '"></div>';
                 newerDiv = $("<div>");
                 newerDiv.addClass("cell small-2 text-center");
                 newerDiv.html(slide);
@@ -175,7 +191,7 @@ function retrieveTeleport(){
                 newerDiv.attr("style", "float: left");
                 newDiv.append(newerDiv);
             }
-            $("#qoL-Board").empty();
+            
             $("#qoL-Board").append(newDiv);   
             $("#qoL-Board").attr("style", "background-color:white");
             for(var j=0; j<data.length; j++){
@@ -186,6 +202,7 @@ function retrieveTeleport(){
 }
 // function call for handling the ridb API call
 function retrieveRidb(){
+    $("#rec-Board").empty(); 
     database.ref().once("value").then(function(snapshot){
         var urlGeo = snapshot.val().urls.geocode;
         var keyGeo = "&key=" + snapshot.val().keys.maps;
@@ -211,10 +228,10 @@ function retrieveRidb(){
                 newPark.addClass("vertical menu accordion-menu");
                 for(var i = 0; i<data.length; i++){
                     var newList = $("<li>");
-                    newList.html('<a href="#"><h5>' + data[i].RecAreaName + '</h5></a><ul class="menu vertical nested"><li><a href="#"><p>' + data[i].RecAreaDescription + '</p></a></li></ul>');
+                    newList.html('<a href="#"><h5>' + data[i].RecAreaName + '</h5></a><ul class="menu vertical nested"><li><a href="#"><p>' + removeTags(data[i].RecAreaDescription) + '</p></a></li></ul>');
                     newPark.append(newList);
                 }
-                $("#rec-Board").empty();            
+                           
                 $("#rec-Board").append(newPark);
                 $("#rec-Board").attr("style", "background-color:white; overflow-y: scroll");
             });
@@ -223,6 +240,7 @@ function retrieveRidb(){
 }  
 // function for retreiving the job API data
 function retrieveJobs(){
+    $("#job-Board").empty();
     urlsDB.once("value").then(function(snapshot){
         var url = snapshot.val().careerjet;
         var queryUrl = url + "pagesize=10&keywords=" + convertTextPlus(userData.jobQuery) + "&page=124&location=" + convertTextPlus(userData.city) + "," + userData.state;
@@ -248,7 +266,7 @@ function retrieveJobs(){
                 var newP = $("<p>");
                 newP.addClass("job");
                 newP.attr("id", "job-description" + i);
-                newP.html(data[i].description);
+                newP.html(removeTags(data[i].description));
                 var newBtn = $("<button>");
                 newBtn.addClass("jobs");
                 newBtn.attr("id", "jobs-btn-" + i);
@@ -260,13 +278,14 @@ function retrieveJobs(){
                 newerDiv.append(newBtn);
                 newDiv.append(newerDiv);
             }
-            $("#job-Board").empty();
+           
             $("#job-Board").append(newDiv);
             $("#job-Board").attr("style", 'background-color: white; overflow-y: scroll');
         });
     });
 }  
 function retrieveMaps(){
+    $("#map-Board").empty();
     database.ref().once("value").then(function(snapshot){
         var urlGeo = snapshot.val().urls.geocode;
         var keyGeo = "&key=" + snapshot.val().keys.maps;
@@ -288,7 +307,7 @@ function retrieveMaps(){
             newMap.attr("height", "90%");
             newMap.attr("src", queryUrl);
             newMap.addClass("map ");
-            $("#map-Board").empty();
+            
             $("#map-Board").append(newMap);
         });
     });
